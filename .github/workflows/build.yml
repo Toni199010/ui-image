@@ -1,1 +1,25 @@
 
+name: build-node-image
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t node22-modules:1.0 .
+
+      - name: Verify
+        run: |
+          docker run --rm node22-modules:1.0 node --version
+          docker run --rm node22-modules:1.0 npm ls --depth=0
+
+      - name: Save image
+        run: docker save node22-modules:1.0 | gzip > node22-modules.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node22-modules-image
+          path: node22-modules.tar.gz
+          retention-days: 7
