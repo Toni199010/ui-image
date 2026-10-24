@@ -9,7 +9,7 @@ RUN microdnf install -y gcc-c++ make python3 \
 
 COPY package.json package-lock.json /app/
 
-RUN npm ci
+RUN npm install
 
 ENV NODE_PATH=/app/node_modules
 ENV PATH="/app/node_modules/.bin:$PATH"
